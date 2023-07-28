@@ -46,6 +46,55 @@ const Body = () => {
     csvData,
   ]);
 
+  useEffect(() => {
+    if (numberSelect.length > 0) {
+      const fullyFilteredData = csvData.filter((item) =>
+        numberSelect.includes(item.number)
+      );
+      console.log(fullyFilteredData);
+      const uniquemod3 = [
+        ...new Set(fullyFilteredData.map((item) => item.mod3)),
+      ];
+      const uniquemod4 = [
+        ...new Set(fullyFilteredData.map((item) => item.mod4)),
+      ];
+      const uniquemod5 = [
+        ...new Set(fullyFilteredData.map((item) => item.mod5)),
+      ];
+      const uniquemod6 = [
+        ...new Set(fullyFilteredData.map((item) => item.mod6)),
+      ];
+
+      // console.log(uniquemod3);
+
+      setmod3Select(uniquemod3);
+      setmod4Select(uniquemod4);
+      setmod5Select(uniquemod5);
+      setmod6Select(uniquemod6);
+    } else {
+      const mod3Options = [...new Set(csvData.map((item) => item.mod3))].slice(
+        0,
+        -1
+      );
+      const mod4Options = [...new Set(csvData.map((item) => item.mod4))].slice(
+        0,
+        -1
+      );
+      const mod5Options = [...new Set(csvData.map((item) => item.mod5))].slice(
+        0,
+        -1
+      );
+      const mod6Options = [...new Set(csvData.map((item) => item.mod6))].slice(
+        0,
+        -1
+      );
+      setmod3Select(mod3Options);
+      setmod4Select(mod4Options);
+      setmod5Select(mod5Options);
+      setmod6Select(mod6Options);
+    }
+  }, [numberSelect]);
+
   const Columns = [
     { name: "Numbers", selector: (row) => row.number, sortable: true },
     { name: "Mod3", selector: (row) => row.mod3, sortable: true },
@@ -69,22 +118,6 @@ const Body = () => {
     -1
   );
 
-  const mod3Options = [...new Set(csvData.map((item) => item.mod3))].slice(
-    0,
-    -1
-  );
-  const mod4Options = [...new Set(csvData.map((item) => item.mod4))].slice(
-    0,
-    -1
-  );
-  const mod5Options = [...new Set(csvData.map((item) => item.mod5))].slice(
-    0,
-    -1
-  );
-  const mod6Options = [...new Set(csvData.map((item) => item.mod6))].slice(
-    0,
-    -1
-  );
   // const options = [
   //   numberOptions,
   //   mod3Options,
@@ -116,52 +149,75 @@ const Body = () => {
           isObject={false}
           showArrow
           hidePlaceholder
-          selectedValues={numberSelect}
-          onSelect={(selectedList) => setNumberSelect(selectedList)}
-          onRemove={(selectedList) => setNumberSelect(selectedList)}
+          // selectedValues={numberSelect}
+          onSelect={(selectedList) =>
+            setNumberSelect(selectedList.map((num) => num))
+          }
+          onRemove={(selectedList) =>
+            setNumberSelect(selectedList.map((num) => num))
+          }
         />
+        {/* {console.log(numberSelect)} */}
         <Multiselect
-          options={mod3Options}
+          options={mod3Select}
           placeholder="Mod3"
           isObject={false}
           showArrow
           hidePlaceholder
-          onSelect={(selectedList) => setmod3Select(selectedList)}
-          onRemove={(selectedList) => setmod3Select(selectedList)}
+          onSelect={(selectedList) =>
+            setmod3Select(selectedList.map((num) => num))
+          }
+          onRemove={(selectedList) =>
+            setmod3Select(selectedList.map((num) => num))
+          }
         />
+        {/* {console.log(mod3Select.length)} */}
         <Multiselect
-          options={mod4Options}
+          options={mod4Select}
           placeholder="Mod4"
           isObject={false}
           showArrow
           hidePlaceholder
-          onSelect={(selectedList) => setmod4Select(selectedList)}
-          onRemove={(selectedList) => setmod4Select(selectedList)}
+          onSelect={(selectedList) =>
+            setmod4Select(selectedList.map((num) => num))
+          }
+          onRemove={(selectedList) =>
+            setmod4Select(selectedList.map((num) => num))
+          }
         />
         <Multiselect
-          options={mod5Options}
+          options={mod5Select}
           placeholder="Mod5"
           isObject={false}
           showArrow
           hidePlaceholder
-          onSelect={(selectedList) => setmod5Select(selectedList)}
-          onRemove={(selectedList) => setmod5Select(selectedList)}
+          onSelect={(selectedList) =>
+            setmod5Select(selectedList.map((num) => num))
+          }
+          onRemove={(selectedList) =>
+            setmod5Select(selectedList.map((num) => num))
+          }
         />
         <Multiselect
-          options={mod6Options}
+          options={mod6Select}
           placeholder="Mod6"
           isObject={false}
           showArrow
           hidePlaceholder
-          onSelect={(selectedList) => setmod6Select(selectedList)}
-          onRemove={(selectedList) => setmod6Select(selectedList)}
+          onSelect={(selectedList) =>
+            setmod6Select(selectedList.map((items) => items))
+          }
+          onRemove={(selectedList) =>
+            setmod6Select(selectedList.map((num) => num))
+          }
         />
+        {/* {console.log(mod6Select)} */}
       </div>
 
       <div>
         <div>
           <input
-            className="bg-black text-white"
+            className="hover:border"
             type="text"
             placeholder="Search Number"
             value={searchText}

@@ -1,7 +1,7 @@
 import React from "react";
 
 const NavBar = () => {
-  return <div>NavBar</div>;
+  return <div className="flex justify-center items-center">LOOP ASSESMENT</div>;
 };
 
 export default NavBar;
