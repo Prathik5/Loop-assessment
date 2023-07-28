@@ -8,6 +8,12 @@ const Body = () => {
   const [csvData, setCSVData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [numberSelect, setNumberSelect] = useState([]);
+  const [mod3Select, setmod3Select] = useState([]);
+  const [mod4Select, setmod4Select] = useState([]);
+  const [mod5Select, setmod5Select] = useState([]);
+  const [mod6Select, setmod6Select] = useState([]);
+
   useEffect(() => {
     const parseData = async () => {
       Papa.parse(Data, {
@@ -19,11 +25,26 @@ const Body = () => {
     parseData();
   }, []);
   useEffect(() => {
-    const filteredData = csvData.filter((row) =>
-      row.number.toString().includes(searchText)
-    );
+    const filteredData = csvData.filter((row) => {
+      return (
+        (!numberSelect.length || numberSelect.includes(row.number)) &&
+        (!mod3Select.length || mod3Select.includes(row.mod3)) &&
+        (!mod4Select.length || mod4Select.includes(row.mod4)) &&
+        (!mod5Select.length || mod5Select.includes(row.mod5)) &&
+        (!mod6Select.length || mod6Select.includes(row.mod6)) &&
+        (!searchText || row.number.toString().includes(searchText))
+      );
+    });
     setFilteredData(filteredData);
-  }, [searchText, csvData]);
+  }, [
+    numberSelect,
+    mod3Select,
+    mod4Select,
+    mod5Select,
+    mod6Select,
+    searchText,
+    csvData,
+  ]);
 
   const Columns = [
     { name: "Numbers", selector: (row) => row.number, sortable: true },
@@ -43,11 +64,9 @@ const Body = () => {
     };
   });
 
-  const numberOptions = [...new Set(csvData.map((item) => item.number))].map(
-    (value) => ({
-      value: value,
-      label: value.toString(),
-    })
+  const numberOptions = [...new Set(csvData.map((item) => item.number))].slice(
+    0,
+    -1
   );
 
   const mod3Options = [...new Set(csvData.map((item) => item.mod3))].slice(
@@ -66,15 +85,40 @@ const Body = () => {
     0,
     -1
   );
+  // const options = [
+  //   numberOptions,
+  //   mod3Options,
+  //   mod4Options,
+  //   mod5Options,
+  //   mod6Options,
+  // ];
 
   return (
     <>
-      <div className="flex justify-evenly">
+      <div className="flex justify-evenly p-2 m-2">
+        {/* {options.map((item) => {
+          return (
+            <Multiselect
+              options={item}
+              isObject={false}
+              showArrow
+              placeholder="Search"
+              hidePlaceholder
+              onSelect={(selectedItems) => {
+                console.log(selectedItems);
+              }}
+            />
+          );
+        })} */}
         <Multiselect
           options={numberOptions}
           placeholder="Number"
           isObject={false}
           showArrow
+          hidePlaceholder
+          selectedValues={numberSelect}
+          onSelect={(selectedList) => setNumberSelect(selectedList)}
+          onRemove={(selectedList) => setNumberSelect(selectedList)}
         />
         <Multiselect
           options={mod3Options}
@@ -82,6 +126,8 @@ const Body = () => {
           isObject={false}
           showArrow
           hidePlaceholder
+          onSelect={(selectedList) => setmod3Select(selectedList)}
+          onRemove={(selectedList) => setmod3Select(selectedList)}
         />
         <Multiselect
           options={mod4Options}
@@ -89,6 +135,8 @@ const Body = () => {
           isObject={false}
           showArrow
           hidePlaceholder
+          onSelect={(selectedList) => setmod4Select(selectedList)}
+          onRemove={(selectedList) => setmod4Select(selectedList)}
         />
         <Multiselect
           options={mod5Options}
@@ -96,6 +144,8 @@ const Body = () => {
           isObject={false}
           showArrow
           hidePlaceholder
+          onSelect={(selectedList) => setmod5Select(selectedList)}
+          onRemove={(selectedList) => setmod5Select(selectedList)}
         />
         <Multiselect
           options={mod6Options}
@@ -103,6 +153,8 @@ const Body = () => {
           isObject={false}
           showArrow
           hidePlaceholder
+          onSelect={(selectedList) => setmod6Select(selectedList)}
+          onRemove={(selectedList) => setmod6Select(selectedList)}
         />
       </div>
 
@@ -121,6 +173,9 @@ const Body = () => {
             pagination
             paginationPerPage={100}
             paginationRowsPerPageOptions={[100, 150, 200]}
+            highlightOnHover
+            striped
+            dense
           />
         </div>
       </div>
